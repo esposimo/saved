@@ -29,6 +29,8 @@ interface AdapterInterface {
     public function getPDOInstance();
 }
 
+
+
 /**
  * 
  * [
