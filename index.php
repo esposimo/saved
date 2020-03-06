@@ -465,106 +465,10 @@ class Bindable implements BindableInterface {
  * chiedendolo al metodo getTable della tabella
  * 
  */
-interface ColumnObjectTypeInterface {
 
-    public function getType();
 
-    public function isValid($value);
 
-    public function getBindType();
-}
 
-abstract class ColumnObjectType implements ColumnObjectTypeInterface {
-
-    /**
-     * levare il riferimento alla colonna. forse.
-     */
-    const COLUMN_TYPE_NUMERIC = 1; // variabili numeriche
-    const COLUMN_TYPE_DATE = 2; // variabili di tipo date and time
-    const COLUMN_TYPE_CHAR = 3; // variabili di tipo char (ovvero storicizzano i caratteri in base ai byte)
-    const COLUMN_TYPE_UNICODE = 4; // variaibli di tipo unicode (storicizzano gli unicode)
-    const COLUMN_TYPE_BINARY = 5;
-    const COLUMN_TYPE_MISC = 6;
-
-    protected $dataTypeName = [
-        self::COLUMN_TYPE_NUMERIC => 'numeric',
-        self::COLUMN_TYPE_DATE => 'datetime',
-        self::COLUMN_TYPE_CHAR => 'string',
-        self::COLUMN_TYPE_UNICODE => 'unicode',
-        self::COLUMN_TYPE_BINARY => 'binary',
-        self::COLUMN_TYPE_MISC => 'misc'
-    ];
-
-    /**
-     *
-     * @var int 
-     */
-    protected $type;
-    protected $constbind = null;
-
-    /**
-     *
-     * @var \smn\lazyc\dbc\Catalog\ColumnInterface 
-     */
-    protected $column;
-
-    public function __construct(\smn\lazyc\dbc\Catalog\ColumnInterface $column) {
-        $this->column = $column;
-    }
-
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * Restituisce il tipo di PDO::PARAM_* da utilizzare per il binding
-     * @param type $value
-     * @return type
-     */
-    public function checkTypeColumn($value) {
-        if (is_string($value)) {
-            $param_type = PDO::PARAM_STR;
-        } else if (is_numeric($value)) {
-            if (is_int($value)) {
-                $param_type = PDO::PARAM_INT;
-            } else {
-                $param_type = PDO::PARAM_STR;
-            }
-        } else if (is_null($value)) {
-            $param_type = PDO::PARAM_NULL;
-        } else if (is_bool($value)) {
-            $param_type = PDO::PARAM_BOOL;
-        } else if (is_resource($value())) {
-            $param_type = PDO::PARAM_LOB;
-        } else {
-            $param_type = PDO::PARAM_STR;
-        }
-        $this->constbind = $param_type;
-        return $param_type;
-    }
-
-    abstract public function isValid($value);
-
-    public function getBindType() {
-        return $this->constbind;
-    }
-
-}
-
-interface StringObjectTypeInterface extends ColumnObjectTypeInterface {
-
-    /**
-     * Restituisce il numero di caratteri della stringa
-     * @return int
-     */
-    public function countChar();
-
-    /**
-     * Restituisce il numero di bytes utili per storicizzare la stringa
-     * @return int
-     */
-    public function countBytes();
-}
 
 // le variabili di tipo stringa storicizzano il numero di caratteri in base 
 // al numero di caratteri effettivo del charact ser della colonna
@@ -580,27 +484,19 @@ interface StringObjectTypeInterface extends ColumnObjectTypeInterface {
 
 
 
-class StringObjectType extends ColumnObjectType implements StringObjectTypeInterface {
 
-    protected $type = PDO::PARAM_STR;
 
-    public function isValid($value) {
-        return is_string($value);
-    }
 
-    public function countBytes() {
-        
-    }
 
-    public function countChar() {
-        
-    }
 
-}
 
-interface NumericObjectType {
-    
-}
+
+
+
+
+
+
+
 
 /**
  * 
@@ -622,10 +518,10 @@ interface NumericObjectType {
  * 
  * 
  */
-use smn\lazyc\dbc\Catalog\Schema;
-use smn\lazyc\dbc\Catalog\Table;
-use smn\lazyc\dbc\Catalog\Column;
-use smn\lazyc\dbc\Catalog\Constraint\PrimaryKeyConstraint;
+//use smn\lazyc\dbc\Catalog\Schema;
+//use smn\lazyc\dbc\Catalog\Table;
+//use smn\lazyc\dbc\Catalog\Column;
+//use smn\lazyc\dbc\Catalog\Constraint\PrimaryKeyConstraint;
 
 //$schema = new Schema('schema');
 //$schema->addChild(new Table('tabella'));
@@ -647,7 +543,7 @@ use smn\lazyc\dbc\Catalog\Constraint\PrimaryKeyConstraint;
  * interfaccia statement wrappa lo statement (PDOStatement)
  * 
  */
-interface AdapterInterface {
+interface AdapterInterfacekhh {
 
  
     
