@@ -45,13 +45,13 @@ class CatalogObject implements CatalogObjectInterface {
      * @var CatalogObjectInterface[][]
      */
     protected $child = [];
-    
+
     /**
      *
      * @var EncodingInterface 
      */
     protected $encoding;
-    
+
     /**
      * Costruttore della classe. Crea un oggetto di catalogo con il nome $name <br>
      * e di tipo $type.
@@ -190,9 +190,8 @@ class CatalogObject implements CatalogObjectInterface {
         $children = array_map(function(CatalogObjectInterface $child) {
             return $child->getName();
         }, $this->child[$type]);
-        
+
         return (array_search($name, $children) === false) ? false : true;
-        
     }
 
     /**
@@ -272,6 +271,36 @@ class CatalogObject implements CatalogObjectInterface {
      */
     public function setEncoding(EncodingInterface $encoding) {
         $this->encoding = $encoding;
+    }
+
+    /**
+     * Crea un oggetto di catalogo in base a ciò che viene indicato
+     * @param string $name Nome oggetto di catalogo
+     * @param string $type Tipologia oggetto di catalogo
+     * @param string $encoding Encoding dell'oggetto di catalogo
+     * @param type $options Opzioni estese per oggetti custom
+     * @return static::class
+     */
+    public static function createCatalogObjectInstance(string $name, $options = array()) {
+        if (self::class == static::class) {
+            return false;
+        }
+        $instance = new static($name);
+        if ((array_key_exists('encoding', $options) && (isset($options['encoding'])))) {
+            $instance->setEncoding(new Encoding($options['encoding']));
+        }
+        if (array_key_exists('object_child', $options)) {
+            foreach($options['object_child'] as $child) {
+                $type = $child['type'];
+                $name = $child['name'];
+                unset($child['type']);
+                unset($child['name']);
+                $options = array_merge([], $child);
+                $child_instance = call_user_func_array([$type, 'createCatalogObjectInstance'],[$name,$options]);
+                $instance->addChild($child_instance);
+            }
+        }
+        return $instance;
     }
 
 }

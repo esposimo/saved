@@ -140,5 +140,16 @@ class Table extends CatalogObject implements PrintableInterface, TableInterface 
     public function removeColumn(string $column) {
         $this->removeChild($column, Column::TYPENAME);
     }
+    
+    public static function createCatalogObjectInstance(string $name, $options = array()) {
+        $table = parent::createCatalogObjectInstance($name, $options);
+        if (array_key_exists('constraints', $options)) {
+            $constraints = $options['constraints'];
+            foreach($constraints as $constraint) {
+                // factory method per constraint
+            }
+        }
+        return $table;
+    }
 
 }

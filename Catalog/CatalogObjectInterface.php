@@ -115,5 +115,13 @@ interface CatalogObjectInterface {
      */
     public function setEncoding(EncodingInterface $encoding);
     
+    /**
+     * Crea un oggetto di catalogo in base a ciò che viene indicato
+     * @param string $name Nome oggetto di catalogo
+     * @param type $options Opzioni estese per oggetti custom
+     * @return static::class
+     */
+    public static function createCatalogObjectInstance(string $name, $options = []);
+    
 }
 
