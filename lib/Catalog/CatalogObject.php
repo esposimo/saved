@@ -59,6 +59,9 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type tipologia oggetto di catalogo
      */
     public function __construct(string $name, string $type) {
+        if ((preg_match('/\s/',$name))  || (preg_match('/\s/', $type))) {
+            throw new \Exception('No spaces');
+        }
         $this->setName($name);
         $this->setType($type);
     }
