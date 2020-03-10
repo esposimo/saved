@@ -156,4 +156,20 @@ class Constraint implements ConstraintInterface {
         return false;
     }
 
+    /**
+     * Crea una constraint class
+     * @param ColumnInterface $columns Lista delle colonne associate a questa constraint
+     * @param Mixed $args Opzioni estese per constraint custom
+     * @return static::class
+     */
+    public static function createConstraintInstance(array $columns, ...$args) {
+         if (self::class == static::class) {
+            return false;
+        }
+        $instance = new static($columns);
+        if (array_key_exists('name', $options)) {
+            $instance->setName($options['name']);
+        }
+        return $instance;
+    }
 }

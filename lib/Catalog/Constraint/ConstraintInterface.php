@@ -66,4 +66,14 @@ interface ConstraintInterface {
      * @return TableInterface
      */
     public function getTable();
+    
+    /**
+     * Crea una constraint class
+     * @param ColumnInterface $columns Lista delle colonne associate a questa constraint
+     * @param Array $options Opzioni estese per constraint custom
+     * @return static::class
+     */
+    public static function createConstraintInstance(array $columns, $options = []);
+    
+ 
 }

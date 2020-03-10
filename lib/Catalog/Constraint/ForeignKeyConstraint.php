@@ -48,6 +48,20 @@ class ForeignKeyConstraint extends Constraint implements ForeignKeyConstraintInt
         }
         return $this->references->getTable();
     }
+    
+    /**
+     * Crea una constraint class di tipo Foreign Key
+     * @param ColumnInterface $columns Lista delle colonne associate a questa constraint
+     * @param Array $options Opzioni estese per constraint custom
+     * @return static::class
+     */
+    public static function createConstraintInstance(array $columns, $options = []) {
+        $instance = parent::createConstraintInstance($columns, $args);
+        if (array_key_exists('reference', $options)) {
+            $instance->relationTo($options['reference']);
+        }
+        return $instance;
+    }
 
 }
 

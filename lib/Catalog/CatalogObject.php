@@ -59,7 +59,7 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type tipologia oggetto di catalogo
      */
     public function __construct(string $name, string $type) {
-        if ((preg_match('/\s/',$name))  || (preg_match('/\s/', $type))) {
+        if ((preg_match('/\s/', $name)) || (preg_match('/\s/', $type))) {
             throw new \Exception('No spaces');
         }
         $this->setName($name);
@@ -158,6 +158,7 @@ class CatalogObject implements CatalogObjectInterface {
             // di ogni tipo
             // se non esistono figli, sarà restituito $children con il suo primo valore
             // ovvero array vuoto
+            // ma non dovrebbe restituire direttamente $this->child ?
             foreach ($this->child as $type) {
                 $children = array_merge($children, $type);
             }
@@ -293,14 +294,18 @@ class CatalogObject implements CatalogObjectInterface {
             $instance->setEncoding(new Encoding($options['encoding']));
         }
         if (array_key_exists('object_child', $options)) {
-            foreach($options['object_child'] as $child) {
-                $type = $child['type'];
-                $name = $child['name'];
-                unset($child['type']);
-                unset($child['name']);
-                $options = array_merge([], $child);
-                $child_instance = call_user_func_array([$type, 'createCatalogObjectInstance'],[$name,$options]);
-                $instance->addChild($child_instance);
+            foreach ($options['object_child'] as $child) {
+                if ($child instanceof CatalogObjectInterface) {
+                    $instance->addChild($child);
+                } else {
+                    $type = $child['type'];
+                    $name = $child['name'];
+                    unset($child['type']);
+                    unset($child['name']);
+                    $options = array_merge([], $child);
+                    $child_instance = call_user_func_array([$type, 'createCatalogObjectInstance'], [$name, $options]);
+                    $instance->addChild($child_instance);
+                }
             }
         }
         return $instance;
