@@ -162,7 +162,7 @@ class Constraint implements ConstraintInterface {
      * @param Mixed $args Opzioni estese per constraint custom
      * @return static::class
      */
-    public static function createConstraintInstance(array $columns, ...$args) {
+    public static function createConstraintInstance(array $columns, $options = []) {
          if (self::class == static::class) {
             return false;
         }

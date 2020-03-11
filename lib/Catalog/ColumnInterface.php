@@ -55,5 +55,54 @@ interface ColumnInterface extends CatalogObjectInterface {
      * @param ConstraintInterface $constraint
      */
     public function addConstraint(ConstraintInterface $constraint);
+    
+    /**
+     * Restituisce la classe Constraint di default
+     * @return Constraint\DefaultConstraintInterface
+     */
+    public function getDefault();
+    
+    /**
+     * Restituite true o false se la colonna ha un valore di default
+     * @return bool
+     */
+    public function hasDefault();
+    
+    /**
+     * Restituisce true o false se la colonna ha un indice associato
+     * @return bool
+     */
+    public function hasIndex();
+    
+    /**
+     * Restituisce la lista degli indici associati alla colonna
+     * @return Constraint\IndexConstraintInterface[]
+     */
+    public function getIndex();
+    
+    /**
+     * Restituisce true o false se esiste una constraint di tipo check
+     * @return bool
+     */
+    public function hasCheck();
+    
+    /**
+     * Restituisce le constraint di tipo check
+     * @return Constraint\CheckConstraintInterface[]
+     */
+    public function getCheck();
+    
+    /**
+     * Restituisce true o false se esiste una foreign key sulla colonna
+     * @return bool
+     */
+    public function hasForeignKey();
+    
+    
+    /**
+     * Restituisce le foreign key della colonna
+     * @return Constraint\ForeignKeyConstraintInterface
+     */
+    public function getForeignKey();
 
 }

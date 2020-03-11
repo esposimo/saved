@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-namespace smn\lazyc\dbc\Catalog\Constraint;;
+namespace smn\lazyc\dbc\Catalog\Constraint;
 use smn\lazyc\dbc\Catalog\ColumnInterface;
 /**
  * L'interfaccia Constraint rappresenta una Constraint di un database

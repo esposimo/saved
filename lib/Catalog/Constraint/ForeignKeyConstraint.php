@@ -56,7 +56,7 @@ class ForeignKeyConstraint extends Constraint implements ForeignKeyConstraintInt
      * @return static::class
      */
     public static function createConstraintInstance(array $columns, $options = []) {
-        $instance = parent::createConstraintInstance($columns, $args);
+        $instance = parent::createConstraintInstance($columns, $options);
         if (array_key_exists('reference', $options)) {
             $instance->relationTo($options['reference']);
         }
