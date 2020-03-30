@@ -7,7 +7,6 @@
 
 namespace smn\lazyc\dbc\Catalog;
 
-use smn\lazyc\dbc\Catalog\EncodingInterface;
 
 /**
  * L'interfaccia CatalogObjectInterface definisce la struttura necessaria per<br>
@@ -73,7 +72,7 @@ interface CatalogObjectInterface {
      * verranno restituiti solo i figli di tipologia $type. Se non esistono figli<br>
      * di tipo $type verrà restituito un array vuoto
      * @param string $type
-     * @return Array
+     * @return array
      */
     public function getChildren(string $type = null);
 
@@ -102,6 +101,11 @@ interface CatalogObjectInterface {
      * @return CatalogObjectInterface
      */
     public function getParent();
+
+    /**
+     * Rimuove il padre dell'oggetto di catalogo.
+     */
+    public function removeParent();
     
     /**
      * Restituisce l'istanza che definisce il charset di questo oggetto di catalogo
@@ -118,7 +122,7 @@ interface CatalogObjectInterface {
     /**
      * Crea un oggetto di catalogo in base a ciò che viene indicato
      * @param string $name Nome oggetto di catalogo
-     * @param type $options Opzioni estese per oggetti custom
+     * @param array $options Opzioni estese per oggetti custom
      * @return static::class
      */
     public static function createCatalogObjectInstance(string $name, $options = []);

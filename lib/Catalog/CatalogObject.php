@@ -8,8 +8,8 @@
 
 namespace smn\lazyc\dbc\Catalog;
 
-use smn\lazyc\dbc\Catalog\CatalogObjectInterface;
-use smn\lazyc\dbc\Catalog\EncodingInterface;
+
+use Exception;
 
 /**
  * Description of CatalogObject
@@ -36,7 +36,7 @@ class CatalogObject implements CatalogObjectInterface {
 
     /**
      * Padre dell'oggetto di catalogo
-     * @var type 
+     * @var CatalogObjectInterface
      */
     protected $parent = null;
 
@@ -57,10 +57,11 @@ class CatalogObject implements CatalogObjectInterface {
      * e di tipo $type.
      * @param string $name Nome dell'oggetto di catalogo
      * @param string $type tipologia oggetto di catalogo
+     * @throws Exception
      */
     public function __construct(string $name, string $type) {
         if ((preg_match('/\s/', $name)) || (preg_match('/\s/', $type))) {
-            throw new \Exception('No spaces');
+            throw new Exception('No spaces');
         }
         $this->setName($name);
         $this->setType($type);
@@ -233,8 +234,10 @@ class CatalogObject implements CatalogObjectInterface {
      */
     public function removeChild(string $name, string $type) {
         if (($index = $this->getIndexOfInstance($name, $type)) !== false) {
+            $object = $this->child[$type][$index];
             unset($this->child[$type][$index]);
             $this->child[$type] = array_values($this->child[$type]);
+            $object->removeParent();
         }
     }
 
@@ -244,8 +247,10 @@ class CatalogObject implements CatalogObjectInterface {
      */
     public function removeChildByInstance(CatalogObjectInterface $object) {
         if (($index = $this->getIndexOfInstance($object->getName(), $object->getType())) !== false) {
+            $type = $object->getType();
             unset($this->child[$type][$index]);
             $this->child[$type] = array_values($this->child[$type]);
+            $object->removeParent();
         }
     }
 
@@ -261,6 +266,17 @@ class CatalogObject implements CatalogObjectInterface {
         $object->addChild($this);
     }
 
+    /**
+     * Rimuove il padre dell'oggetto di catalogo.
+     */
+    public function removeParent()
+    {
+        if ($this->parent === null) {
+            return;
+        }
+        $this->parent->removeChildByInstance($this);
+        $this->parent = null;
+    }
     /**
      * Restituisce l'istanza Encoding
      * @return EncodingInterface
@@ -282,12 +298,12 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $name Nome oggetto di catalogo
      * @param string $type Tipologia oggetto di catalogo
      * @param string $encoding Encoding dell'oggetto di catalogo
-     * @param type $options Opzioni estese per oggetti custom
-     * @return static::class
+     * @param array $options Opzioni estese per oggetti custom
+     * @return static::class|bool
      */
     public static function createCatalogObjectInstance(string $name, $options = array()) {
         if (self::class == static::class) {
-            return false;
+            throw new Exception(sprintf('Questo metodo può essere usato solo da oggetti definiti e non dalla %s', self::class));
         }
         $instance = new static($name);
         if ((array_key_exists('encoding', $options) && (isset($options['encoding'])))) {
@@ -310,5 +326,6 @@ class CatalogObject implements CatalogObjectInterface {
         }
         return $instance;
     }
+
 
 }

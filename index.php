@@ -225,7 +225,6 @@ spl_autoload_register(function($class) {
     $no_root = current($explode);
 
     $file = sprintf('%s/lib/%s.php', __DIR__, $no_root);
-
     if (is_file($file)) {
         require_once $file;
     }
@@ -649,6 +648,8 @@ class Data implements DataInterface, BindableObjectInterface {
     }
 
 }
+
+$p = new \smn\lazyc\dbc\Catalog\Schema('a');
 
 // ricordati che tutte queste classi rappresentano gli oggetti di catalogo
 // non i valori che possono esserci sul database
