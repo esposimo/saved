@@ -69,8 +69,8 @@ interface ConstraintInterface {
     
     /**
      * Crea una constraint class
-     * @param ColumnInterface $columns Lista delle colonne associate a questa constraint
-     * @param Array $options Opzioni estese per constraint custom
+     * @param array $columns Lista delle colonne associate a questa constraint
+     * @param array $options Opzioni estese per constraint custom name => Nome della constraint
      * @return static::class
      */
     public static function createConstraintInstance(array $columns, $options = []);

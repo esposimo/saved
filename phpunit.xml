@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!-- see http://www.phpunit.de/wiki/Documentation -->
+<!--phpunit bootstrap="/path/to/bootstrap.php"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="true">
+</phpunit-->
+
+<phpunit colors="false" verbose="true" bootstrap="/app/projects/saved/test/bootstrap.php">
+    <testsuites>
+        <testsuite name="Unit Test">
+            <directory>Unit</directory>
+        </testsuite>
+    </testsuites>
+    <extensions>
+        <extension class="smn\lazyc\dbc\test\MyExtension" />
+    </extensions>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="/tmp/report" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="/tmp/coverage.xml"/>
+        <log type="coverage-php" target="/tmp/coverage.serialized"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
+</phpunit>
+

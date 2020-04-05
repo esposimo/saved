@@ -8,7 +8,6 @@
 namespace smn\lazyc\dbc\Catalog;
 use smn\lazyc\dbc\Catalog\CatalogObject;
 use smn\lazyc\dbc\Catalog\PrintableInterface;
-use smn\lazyc\dbc\Catalog\Table;
 use smn\lazyc\dbc\Helper\PlaceHolderSystem;
 use smn\lazyc\dbc\Catalog\Constraint\Constraint;
 use smn\lazyc\dbc\Catalog\Constraint\PrimaryKeyConstraintInterface;

@@ -1,14 +1,17 @@
 <?php
 
-namespace smn\lazyc\dbc\Catalog;
 
 use PHPUnit\Framework\TestCase;
+use smn\lazyc\dbc\Catalog\Table;
+use smn\lazyc\dbc\Catalog\Schema;
+use smn\lazyc\dbc\Catalog\SchemaInterface;
+use smn\lazyc\dbc\Catalog\TableInterface;
 
 class SchemaTest extends TestCase
 {
 
     /**
-     * @var Schema
+     * @var \smn\lazyc\dbc\Catalog\Schema
      */
     protected $object;
 

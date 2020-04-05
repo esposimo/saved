@@ -12,7 +12,6 @@
  */
 // TODO: check include path
 //ini_set('include_path', ini_get('include_path'));
-
 // put your code here
 spl_autoload_register(function($class) {
 
@@ -21,7 +20,23 @@ spl_autoload_register(function($class) {
     end($explode);
     $no_root = current($explode);
 
-    $file = sprintf('%s/lib/%s.php', __DIR__, $no_root);
+    $file = sprintf('%s/../src/%s.php', __DIR__, $no_root);
+    if (is_file($file)) {
+        require_once $file;
+    }
+});
+
+spl_autoload_register(function($class) {
+
+
+
+
+    $replace = str_replace('\\', '/', $class);
+    $explode = explode('/', $replace, 5);
+    end($explode);
+    $no_root = current($explode);
+
+    $file = sprintf('%s/%s.php', __DIR__, $no_root);
     if (is_file($file)) {
         require_once $file;
     }

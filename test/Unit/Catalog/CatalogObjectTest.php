@@ -1,9 +1,16 @@
 <?php
 
-namespace smn\lazyc\dbc\Catalog;
+
 
 use PHPUnit\Framework\TestCase;
 
+use smn\lazyc\dbc\Catalog\CatalogObject;
+use smn\lazyc\dbc\Catalog\Encoding;
+
+/**
+ * Class CatalogObjectTest
+ * @codeCoverage
+ */
 class CatalogObjectTest extends TestCase
 {
 
@@ -224,6 +231,7 @@ class CatalogObjectTest extends TestCase
     public function testCreateCatalogObjectInstance()
     {
         $name = 'factoryName';
+        $this->expectException(\Exception::class);
         $this->assertFalse(CatalogObject::createCatalogObjectInstance($name));
     }
 
