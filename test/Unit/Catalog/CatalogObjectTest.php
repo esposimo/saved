@@ -1,7 +1,6 @@
 <?php
 
 
-
 use PHPUnit\Framework\TestCase;
 
 use smn\lazyc\dbc\Catalog\CatalogObject;
@@ -21,7 +20,7 @@ class CatalogObjectTest extends TestCase
 
     /**
      * @var CatalogObject
-    */
+     */
     protected $objectChild;
 
     /**
@@ -50,10 +49,22 @@ class CatalogObjectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectParent = new CatalogObject($this->parentName,  $this->parentType);
+        $this->objectParent = new CatalogObject($this->parentName, $this->parentType);
         $this->objectChild = new CatalogObject($this->childName, $this->childType);
     }
 
+
+    public function testWithSpaces()
+    {
+
+        $name = 'My Name';
+        $type = 'My Type';
+        $this->expectException(\Exception::class);
+        $c = new CatalogObject($name, 'type');
+        $c = new CatalogObject('name', $type);
+        $c = new CatalogObject($name, $type);
+
+    }
 
     /**
      * @throws \Exception
@@ -64,6 +75,9 @@ class CatalogObjectTest extends TestCase
         $this->objectParent->addChild($this->objectChild);
         $bool = $this->objectParent->hasChild($this->childName, $this->childType);
         $this->assertTrue($bool);
+        $this->assertFalse($this->objectParent->hasChild($this->childName, 'fakeType'));
+        $this->assertFalse($this->objectParent->hasChild('fakeName', $this->childType));
+        $this->assertFalse($this->objectParent->hasChild('fakeName', 'fakeType'));
 
     }
 
@@ -78,8 +92,8 @@ class CatalogObjectTest extends TestCase
         $this->setUp();
         $newtype = 'newType';
         $this->objectParent->setType($newtype);
-        $this->assertIsString($this->objectParent->getType(),'Il tipo restitito non è in formato stringa');
-        $this->assertEquals($newtype,$this->objectParent->getType(),sprintf('Il tipo restituito dal figlio non è %s', $newtype));
+        $this->assertIsString($this->objectParent->getType(), 'Il tipo restitito non è in formato stringa');
+        $this->assertEquals($newtype, $this->objectParent->getType(), sprintf('Il tipo restituito dal figlio non è %s', $newtype));
     }
 
     /**
@@ -92,7 +106,7 @@ class CatalogObjectTest extends TestCase
     {
         $this->setUp();
         $this->assertIsInt(count($this->objectParent->getChildren()));
-        $this->assertEquals(0, count($this->objectParent->getChildren()),'A classe istanziata il numero di figli dovrebbe essere 0');
+        $this->assertEquals(0, count($this->objectParent->getChildren()), 'A classe istanziata il numero di figli dovrebbe essere 0');
         $this->objectParent->addChild($this->objectChild);
         $child = $this->objectParent->getChild($this->childName, $this->childType);
         $count = count($this->objectParent->getChildren());
@@ -105,16 +119,16 @@ class CatalogObjectTest extends TestCase
     }
 
     /**
-    * Il metodo setParent configura un padre ad un figlio. Nel test viene verificato se questo avviene
-    */
+     * Il metodo setParent configura un padre ad un figlio. Nel test viene verificato se questo avviene
+     */
     public function testSetParent()
     {
         $this->setUp();
-        $this->assertNull($this->objectChild->getParent(),'La classe figlio ha già un parent, non dovrebbe');
+        $this->assertNull($this->objectChild->getParent(), 'La classe figlio ha già un parent, non dovrebbe');
 
         $this->objectChild->setParent($this->objectParent);
-        $this->assertSame($this->objectParent, $this->objectChild->getParent(),'La classe padre non è la stessa restituita da getParent()');
-        $this->assertInstanceOf(CatalogObject::class, $this->objectChild->getParent(),sprintf('Il tipo di classe padre dovrebbe essere %s', CatalogObject::class));
+        $this->assertSame($this->objectParent, $this->objectChild->getParent(), 'La classe padre non è la stessa restituita da getParent()');
+        $this->assertInstanceOf(CatalogObject::class, $this->objectChild->getParent(), sprintf('Il tipo di classe padre dovrebbe essere %s', CatalogObject::class));
 
     }
 
@@ -143,22 +157,22 @@ class CatalogObjectTest extends TestCase
 
         $allChildren = $this->objectParent->getChildren();
         $filterChildren = $this->objectParent->getChildren($newType);
-        $this->assertIsArray($allChildren,'I figli dovrebbero essere restituiti in formato array');
-        $this->assertIsArray($filterChildren,'I figli dovrebbero essere restituiti in formato array');
-        $this->assertEquals(2,count($allChildren),sprintf('Sono stati aggiunti due figli ma ne viene restituito solo %s', count($allChildren)));
-        $this->assertEquals(1, count($filterChildren),sprintf('Esiste solo un figlio di tipo %s ma vengono restituiti %s figli di tipo %s', $newType, count($filterChildren), $newType));
-        $this->assertSame($newInstance, $filterChildren[0],'Il figlio ricavato con il filtro non corrisponde');
+        $this->assertIsArray($allChildren, 'I figli dovrebbero essere restituiti in formato array');
+        $this->assertIsArray($filterChildren, 'I figli dovrebbero essere restituiti in formato array');
+        $this->assertEquals(2, count($allChildren), sprintf('Sono stati aggiunti due figli ma ne viene restituito solo %s', count($allChildren)));
+        $this->assertEquals(1, count($filterChildren), sprintf('Esiste solo un figlio di tipo %s ma vengono restituiti %s figli di tipo %s', $newType, count($filterChildren), $newType));
+        $this->assertSame($newInstance, $filterChildren[0], 'Il figlio ricavato con il filtro non corrisponde');
 
     }
 
     public function testRemoveChildByInstance()
     {
         $this->setUp();
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
         $this->objectParent->addChild($this->objectChild);
-        $this->assertEquals(1, count($this->objectParent->getChildren()),sprintf('Dovrebbe essere 1 figlio invece sono %s', count(($this->objectParent->getChildren()))));
+        $this->assertEquals(1, count($this->objectParent->getChildren()), sprintf('Dovrebbe essere 1 figlio invece sono %s', count(($this->objectParent->getChildren()))));
         $this->objectParent->removeChildByInstance($this->objectChild);
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
     }
 
     public function testSetName()
@@ -166,56 +180,56 @@ class CatalogObjectTest extends TestCase
         $this->setUp();
         $newName = 'newName';
         $this->objectParent->setName($newName);
-        $this->assertEquals($newName, $this->objectParent->getName(),sprintf('Il nome dovrebbe essere %s ma è ancora %s', $newName, $this->objectParent->getName()));
+        $this->assertEquals($newName, $this->objectParent->getName(), sprintf('Il nome dovrebbe essere %s ma è ancora %s', $newName, $this->objectParent->getName()));
 
     }
 
     public function testRemoveChild()
     {
         $this->setUp();
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
         $this->objectParent->addChild($this->objectChild);
-        $this->assertEquals(1, count($this->objectParent->getChildren()),sprintf('Dovrebbe essere 1 figlio invece sono %s', count(($this->objectParent->getChildren()))));
+        $this->assertEquals(1, count($this->objectParent->getChildren()), sprintf('Dovrebbe essere 1 figlio invece sono %s', count(($this->objectParent->getChildren()))));
         $name = $this->objectChild->getName();
         $type = $this->objectChild->getType();
         $this->objectParent->removeChild($name, $type);
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
     }
 
     public function test__construct()
     {
         $this->setUp();
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
-        $this->assertEquals($this->objectParent->getName(), $this->parentName,sprintf('Dopo aver istanziato la classe il nome non dovrebbe restare invariato invece risulta cambiato'));
-        $this->assertEquals($this->objectParent->getType(), $this->parentType,sprintf('Dopo aver istanziato la classe il nome non dovrebbe restare invariato invece risulta cambiato'));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('I figli dovrebbero essere 0 invece sono %s', count($this->objectParent->getChildren())));
+        $this->assertEquals($this->objectParent->getName(), $this->parentName, sprintf('Dopo aver istanziato la classe il nome non dovrebbe restare invariato invece risulta cambiato'));
+        $this->assertEquals($this->objectParent->getType(), $this->parentType, sprintf('Dopo aver istanziato la classe il nome non dovrebbe restare invariato invece risulta cambiato'));
     }
 
     public function testSetEncoding()
     {
         $this->setUp();
         $encoding = new Encoding('utf8');
-        $this->assertNull($this->objectParent->getEncoding(),'La classe appena istanziata non deve avere nessun Encoding');
+        $this->assertNull($this->objectParent->getEncoding(), 'La classe appena istanziata non deve avere nessun Encoding');
         $this->objectParent->setEncoding($encoding);
-        $this->assertSame($encoding, $this->objectParent->getEncoding(),'Non è stato restituita la stessa istanza di encoding');
+        $this->assertSame($encoding, $this->objectParent->getEncoding(), 'Non è stato restituita la stessa istanza di encoding');
 
     }
 
     public function testGetChild()
     {
         $this->setUp();
-        $this->assertNull($this->objectParent->getChild($this->childName, $this->childType),sprintf('In fase di creazione della classe non dovrebbe esserci nessun figlio'));
+        $this->assertNull($this->objectParent->getChild($this->childName, $this->childType), sprintf('In fase di creazione della classe non dovrebbe esserci nessun figlio'));
         $this->objectParent->addChild($this->objectChild);
-        $fakeChild = $this->objectParent->getChild($this->childName,'fakeType');
-        $this->assertNull($fakeChild,sprintf('In mancanza di un figlio trovato dovrebbe essere restituito null'));
+        $fakeChild = $this->objectParent->getChild($this->childName, 'fakeType');
+        $this->assertNull($fakeChild, sprintf('In mancanza di un figlio trovato dovrebbe essere restituito null'));
         $child = $this->objectParent->getChild($this->childName, $this->childType);
-        $this->assertSame($child, $this->objectChild,sprintf('Il figlio non è stato restituito'));
+        $this->assertSame($child, $this->objectChild, sprintf('Il figlio non è stato restituito'));
 
     }
 
     public function testGetType()
     {
         $this->setUp();
-        $this->assertEquals($this->parentType, $this->objectParent->getType(),sprintf('Il tipo restituito dovrebbe essere %s', $this->parentType));
+        $this->assertEquals($this->parentType, $this->objectParent->getType(), sprintf('Il tipo restituito dovrebbe essere %s', $this->parentType));
 
     }
 
@@ -224,7 +238,7 @@ class CatalogObjectTest extends TestCase
         $this->setUp();
         $encoding = new Encoding('utf8');
         $this->objectParent->setEncoding($encoding);
-        $this->assertSame($encoding, $this->objectParent->getEncoding(),'Encoding non corrispondente');
+        $this->assertSame($encoding, $this->objectParent->getEncoding(), 'Encoding non corrispondente');
 
     }
 
@@ -239,10 +253,10 @@ class CatalogObjectTest extends TestCase
     {
         $this->setUp();
         $this->objectParent->addChild($this->objectChild);
-        $this->assertSame($this->objectParent, $this->objectChild->getParent(),'Il padre non viene configurato correttamente');
+        $this->assertSame($this->objectParent, $this->objectChild->getParent(), 'Il padre non viene configurato correttamente');
         $this->setUp();
         $this->objectChild->setParent($this->objectParent);
-        $this->assertSame($this->objectParent, $this->objectChild->getParent(),'Il padre non viene configurato correttamente');
+        $this->assertSame($this->objectParent, $this->objectChild->getParent(), 'Il padre non viene configurato correttamente');
 
     }
 
@@ -259,17 +273,71 @@ class CatalogObjectTest extends TestCase
     public function testHasChildByInstance()
     {
         $this->setUp();
-        $this->assertFalse($this->objectParent->hasChildByInstance($this->objectChild),sprintf('Il padre non dovrebbe avere nessun figlio di nessun tipo'));
+        $this->assertFalse($this->objectParent->hasChildByInstance($this->objectChild), sprintf('Il padre non dovrebbe avere nessun figlio di nessun tipo'));
         $this->objectParent->addChild($this->objectChild);
         $this->assertTrue($this->objectParent->hasChildByInstance($this->objectChild), sprintf('Il padre dovrebbe avere almeno un figlio'));
 
     }
 
-    public function testRemoveParent() {
+    public function testRemoveParent()
+    {
         $this->setUp();
         $this->objectParent->addChild($this->objectChild);
         $this->objectChild->removeParent();
-        $this->assertNull($this->objectChild->getParent(),sprintf('La classe figlio non dovrebbe più avere padri'));
-        $this->assertEquals(0, count($this->objectParent->getChildren()),sprintf('La classe padre non dovrebbe più avere figli'));
+        $this->assertNull($this->objectChild->getParent(), sprintf('La classe figlio non dovrebbe più avere padri'));
+        $this->assertEquals(0, count($this->objectParent->getChildren()), sprintf('La classe padre non dovrebbe più avere figli'));
+        $this->assertNull($this->objectChild->removeParent(), sprintf('Il metodo deve restituire null se non ha padri'));
     }
+
+
+    public function testFactoryMethodStructure()
+    {
+
+        $options = [
+            'object_child' => [
+                \smn\lazyc\dbc\Catalog\Table::createCatalogObjectInstance('tabella', [
+                    'object_child' => [
+                        \smn\lazyc\dbc\Catalog\Column::createCatalogObjectInstance('colonna')
+                    ]
+                ]),
+                [
+                    'name' => 'table2',
+                    'type' => \smn\lazyc\dbc\Catalog\Table::class
+                ]
+            ]
+        ];
+        $schema = \smn\lazyc\dbc\Catalog\Schema::createCatalogObjectInstance('schema', $options, 'utf8');
+
+        $this->assertEquals('schema', $schema->getName());
+        $this->assertInstanceOf(\smn\lazyc\dbc\Catalog\TableInterface::class, $schema->getTable('tabella'), '1: La tabella figlio dovrebbe essere una tabella');
+        $this->assertInstanceOf(\smn\lazyc\dbc\Catalog\TableInterface::class, $schema->getTable('table2'), '2: La tabella figlio dovrebbe essere una tabella');
+        $table = $schema->getTable('tabella');
+        $this->assertInstanceOf(\smn\lazyc\dbc\Catalog\ColumnInterface::class, $table->getColumn('colonna'));
+
+    }
+
+    public function testFactoryMethodNoTypeSpecified()
+    {
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No type specified');
+        $c = CatalogObject::createCatalogObjectInstance('name');
+
+    }
+
+    public function testFactoryMethodTypeStringInArray()
+    {
+        $c = CatalogObject::createCatalogObjectInstance('name', ['type' => 'tipo']);
+        $this->assertInstanceOf(CatalogObject::class, $c);
+        $this->assertEquals('tipo', $c->getType());
+
+    }
+
+    public function testFactoryMethodTypeClassNameInArray() {
+        $c = CatalogObject::createCatalogObjectInstance('name', ['type' => \smn\lazyc\dbc\Catalog\Schema::class]);
+        $this->assertInstanceOf(\smn\lazyc\dbc\Catalog\Schema::class, $c);
+        $this->assertEquals(\smn\lazyc\dbc\Catalog\Schema::TYPENAME, $c->getType());
+    }
+
+
 }

@@ -1,14 +1,9 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 namespace smn\lazyc\dbc\Catalog;
 use smn\lazyc\dbc\Catalog\CatalogObject;
 use smn\lazyc\dbc\Catalog\PrintableInterface;
-use smn\lazyc\dbc\Catalog\Schema;
 use smn\lazyc\dbc\Helper\PlaceHolderSystem;
 /**
  * La classe schema rappresenta uno schema di un database generico.

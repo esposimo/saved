@@ -55,5 +55,16 @@ class Encoding implements EncodingInterface {
         return $this->charset;
     }
 
+    public static function createEncodingInstanceFromName(string $name = '')
+    {
+        // se sto usando il metodo passando per Encoding, ho bisogno di un nome
+        if (self::class == static::class) {
+            if ($name == '') {
+                throw new \Exception('No encode specified');
+            }
+            return new self($name);
+        }
+        return new static();
+    }
 }
 

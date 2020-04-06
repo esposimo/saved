@@ -16,7 +16,8 @@ use Exception;
  *
  * @author A760526
  */
-class CatalogObject implements CatalogObjectInterface {
+class CatalogObject implements CatalogObjectInterface
+{
 
     const CATALOG_OBJECT_SCHEMA = 'schema';
     const CATALOG_OBJECT_TABLE = 'table';
@@ -24,13 +25,13 @@ class CatalogObject implements CatalogObjectInterface {
 
     /**
      * Nome dell'oggetto di catalogo
-     * @var String 
+     * @var String
      */
     protected $name;
 
     /**
      * Tipologia oggetto di catalogo
-     * @var String 
+     * @var String
      */
     protected $type;
 
@@ -48,7 +49,7 @@ class CatalogObject implements CatalogObjectInterface {
 
     /**
      *
-     * @var EncodingInterface 
+     * @var EncodingInterface
      */
     protected $encoding;
 
@@ -59,7 +60,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type tipologia oggetto di catalogo
      * @throws Exception
      */
-    public function __construct(string $name, string $type) {
+    public function __construct(string $name, string $type)
+    {
         if ((preg_match('/\s/', $name)) || (preg_match('/\s/', $type))) {
             throw new Exception('No spaces');
         }
@@ -71,7 +73,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Restituisce il nome dell'oggetto di catalogo
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -79,7 +82,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Restituisce il tipo di oggetto di catalogo
      * @return String
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -87,7 +91,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Configura nome dell'oggetto di catalogo
      * @param string $name
      */
-    public function setName(string $name) {
+    public function setName(string $name)
+    {
         $this->name = $name;
     }
 
@@ -95,7 +100,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Configura tipologia oggetto di catalogo
      * @param string $type
      */
-    public function setType(string $type) {
+    public function setType(string $type)
+    {
         $this->type = $type;
     }
 
@@ -104,7 +110,8 @@ class CatalogObject implements CatalogObjectInterface {
      * è già presente, non sarà aggiunto.
      * @param CatalogObjectInterface $object
      */
-    public function addChild(CatalogObjectInterface $object) {
+    public function addChild(CatalogObjectInterface $object)
+    {
         if ($this->hasChildByInstance($object)) {
             return; // throw exception ?
         }
@@ -119,7 +126,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type
      * @return CatalogObjectInterface
      */
-    public function getChild(string $name, string $type) {
+    public function getChild(string $name, string $type)
+    {
         if (($index = $this->getIndexOfInstance($name, $type)) !== false) {
             return $this->child[$type][$index];
         }
@@ -133,7 +141,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type
      * @return boolean
      */
-    private function getIndexOfInstance(string $name, string $type) {
+    private function getIndexOfInstance(string $name, string $type)
+    {
         if (!$this->hasType($type)) {
             return false;
         }
@@ -152,7 +161,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type
      * @return array
      */
-    public function getChildren(string $type = null) {
+    public function getChildren(string $type = null)
+    {
         if (is_null($type)) {
             $children = [];
             // se non richiedo un determinato tipo, creo un array con tutti i figli
@@ -177,7 +187,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Restituisce il padre dell'oggetto di catalogo
      * @return CatalogObjectInterface
      */
-    public function getParent() {
+    public function getParent()
+    {
         return $this->parent;
     }
 
@@ -188,11 +199,12 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type
      * @return bool
      */
-    public function hasChild(string $name, string $type) {
+    public function hasChild(string $name, string $type)
+    {
         if (!$this->hasType($type)) {
             return false;
         }
-        $children = array_map(function(CatalogObjectInterface $child) {
+        $children = array_map(function (CatalogObjectInterface $child) {
             return $child->getName();
         }, $this->child[$type]);
 
@@ -204,7 +216,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param CatalogObjectInterface $object
      * @return bool
      */
-    public function hasChildByInstance(CatalogObjectInterface $object) {
+    public function hasChildByInstance(CatalogObjectInterface $object)
+    {
         $type = $object->getType();
         if (!$this->hasType($type)) {
             return false;
@@ -223,7 +236,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $type
      * @return bool
      */
-    public function hasType(string $type) {
+    public function hasType(string $type)
+    {
         return array_key_exists($type, $this->child);
     }
 
@@ -232,7 +246,8 @@ class CatalogObject implements CatalogObjectInterface {
      * @param string $name
      * @param string $type
      */
-    public function removeChild(string $name, string $type) {
+    public function removeChild(string $name, string $type)
+    {
         if (($index = $this->getIndexOfInstance($name, $type)) !== false) {
             $object = $this->child[$type][$index];
             unset($this->child[$type][$index]);
@@ -245,7 +260,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Rimuove l'istanza figlio $object.
      * @param CatalogObjectInterface $object
      */
-    public function removeChildByInstance(CatalogObjectInterface $object) {
+    public function removeChildByInstance(CatalogObjectInterface $object)
+    {
         if (($index = $this->getIndexOfInstance($object->getName(), $object->getType())) !== false) {
             $type = $object->getType();
             unset($this->child[$type][$index]);
@@ -258,7 +274,8 @@ class CatalogObject implements CatalogObjectInterface {
      * Configura l'oggetto di catalogo padre di questo.
      * @param CatalogObjectInterface $object
      */
-    public function setParent(CatalogObjectInterface $object) {
+    public function setParent(CatalogObjectInterface $object)
+    {
         if ($this->getParent() === $object) {
             return; // ho già questo padre
         }
@@ -272,16 +289,18 @@ class CatalogObject implements CatalogObjectInterface {
     public function removeParent()
     {
         if ($this->parent === null) {
-            return;
+            return null;
         }
         $this->parent->removeChildByInstance($this);
         $this->parent = null;
     }
+
     /**
      * Restituisce l'istanza Encoding
      * @return EncodingInterface
      */
-    public function getEncoding() {
+    public function getEncoding()
+    {
         return $this->encoding;
     }
 
@@ -289,37 +308,86 @@ class CatalogObject implements CatalogObjectInterface {
      * Configura l'istanza Encoding
      * @param EncodingInterface $encoding
      */
-    public function setEncoding(EncodingInterface $encoding) {
+    public function setEncoding(EncodingInterface $encoding)
+    {
         $this->encoding = $encoding;
     }
 
     /**
      * Crea un oggetto di catalogo in base a ciò che viene indicato
      * @param string $name Nome oggetto di catalogo
-     * @param string $type Tipologia oggetto di catalogo
-     * @param string $encoding Encoding dell'oggetto di catalogo
-     * @param array $options Opzioni estese per oggetti custom
+     * @param mixed ...$options Parametri opzionali nel seguente ordine<br>
+     * <object_child> => array di figli misto in questo formato <br>
+     *      CatalogObjectInterface<br>
+     *      array con le seguenti chiavi<br>
+     *      <name> => nome dell'oggetto di catalogo<br>
+     *      <type> => tipologia oggetto di catalogo<br>
+     *      <options> => Opzioni<br>
+     *  <encoding> => <encoding name> Nome dell'encoding<br>
      * @return static::class|bool
      */
-    public static function createCatalogObjectInstance(string $name, $options = array()) {
+    public static function createCatalogObjectInstance(string $name, array $options = [])
+    {
+        // se sto usando il metodo passando per CatalogObject, ho bisogno di un type
         if (self::class == static::class) {
-            throw new Exception(sprintf('Questo metodo può essere usato solo da oggetti definiti e non dalla %s', self::class));
+            // se type esiste ok, altrimenti exception
+            if (array_key_exists('type', $options)) {
+                // se type esiste può essere il nome della classe da istanziare o il tipo stesso
+                $type = $options['type'];
+                try {
+                    $l = new \ReflectionClass($type);
+                    // se la classe è istanziabile e implementa la CatalogObjectClass
+                    if (($l->isInstantiable()) && ($l->implementsInterface(CatalogObjectInterface::class))) {
+                        // creo una $type Object
+                        $instance = $l->newInstanceArgs([$name]);
+                    }
+                } catch (\ReflectionException $e) {
+                    if ($e->getCode() == -1) {
+                        // se tipo non esiste lo imposto come tipo della CatalogObject
+                        $instance = new CatalogObject($name, $type);
+                    }
+                }
+            }
+            else {
+                throw new \Exception('No type specified');
+            }
         }
-        $instance = new static($name);
+        else {
+            $instance = new static($name);
+        }
+        /* farne una funzione esterna ?*/
+        /*       $params = ['object_child','encoding'];
+               $combine = [];
+               if (count($params) != count($options)) {
+                   if (count($params) > count($options)) {
+                       $p = array_slice($params, 0, count($options), true);
+                       $combine = array_combine(array_values($p), array_values($options));
+                   } else {
+                       $p = array_slice($options, 0, count($params), true);
+                       $combine = array_combine(array_values($params), array_values($p));
+                   }
+               } else {
+                   $combine = (count($options) > 0) ? array_combine(array_values($params), array_values($options)) : [];
+               }
+               /* farne una funzione esterna ?*/
+        /* $combine contiene nomi e valori dei parametri */
+
+
         if ((array_key_exists('encoding', $options) && (isset($options['encoding'])))) {
             $instance->setEncoding(new Encoding($options['encoding']));
         }
         if (array_key_exists('object_child', $options)) {
-            foreach ($options['object_child'] as $child) {
+            foreach ($options['object_child'] as $key => $child) {
                 if ($child instanceof CatalogObjectInterface) {
                     $instance->addChild($child);
                 } else {
                     $type = $child['type'];
                     $name = $child['name'];
-                    unset($child['type']);
+//                    unset($child['type']);
                     unset($child['name']);
                     $options = array_merge([], $child);
-                    $child_instance = call_user_func_array([$type, 'createCatalogObjectInstance'], [$name, $options]);
+//                    $child_instance = call_user_func_array(CatalogObject::class, 'createCatalogObjectInstance'], [$name, $options]);
+                    $child_instance = CatalogObject::createCatalogObjectInstance($name,$options);
                     $instance->addChild($child_instance);
                 }
             }

@@ -111,4 +111,16 @@ class ConstraintTest extends TestCase
         $this->assertFalse($this->object->isRelatedTo('newcolumn'), sprintf('La constraint risulta relazionata ad una colonna errata'));
     }
 
+    public function testCreateConstraintInstance() {
+
+        $column = \smn\lazyc\dbc\Catalog\Column::createCatalogObjectInstance('column');
+        $c = Constraint::createConstraintInstance([$column],['name' => 'cname']);
+        $this->assertFalse($c); // La classe Constraint può istanziare una constraint generica?
+        $c = \smn\lazyc\dbc\Catalog\Constraint\PrimaryKeyConstraint::createConstraintInstance([$column],['name' => 'cname']);
+        $this->assertSame('cname', $c->getName());
+        $this->assertCount(1, $c->getRelations());
+        $relation = $c->getRelations();
+        $this->assertSame($column, $relation[0]);
+      }
+
 }

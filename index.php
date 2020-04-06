@@ -585,6 +585,96 @@ interface AdapterInterfacekhh {
  * 
  */
 // pdo, mysql, mysqli, postgres, oracle, sql server
+
+
+/**
+ *
+ *  [name] => Nome
+ *  [type] => <type>::class
+ *  [encoding] => Name|type::class
+ *  [object_child] => [
+ *          [
+ *          [name] => Name
+ *          [type] => <type>::class
+ *          [encoding] => Name|type::class
+ *          [object_child] => *RECURSION*
+ *      ],
+ *      [
+ *          catalogObjectInstance_1,
+ *          catalogObjectInstance_2
+ *          ...
+ *          catalogObjectInstance_N
+ *      ]
+ *   ]
+ *
+ *  L'array di $options è così composto per gli oggetti di catalogo
+ *
+ *  encoding => Nome dell'encoding da usare, in alternativa indicare la classe da utilizzare con type::class
+ *  object_child => Array misto di
+ *      classi che implementano CatalogObjectInterface
+ *      Array per factory method con le seguenti coppi di chiave valore
+ *          name => nome oggetto di catalogo
+ *          type => <type>::class
+ *          encoding
+ *          object_child
+ *
+ *  Per la Table, è possibile inserire l'indice "constraints" per inserire la lista delle constraints da creare o già istanziate
+ *
+ * Constraint
+ *      name => Nome Constraint
+ *      columns => [
+ *          Oggetti ColumnInterface già istanziati
+ *      ]
+ *
+ * ForeignKeyConstraint ha anche l'indice "references" che indica la ColumnInterface (già istanziata) da riferire
+ *
+ * StructureClassd a implementare
+ *
+ * indice structure => struttura  con array d schema
+ * indice fix => lista degli indici della struttura, esclusi fix e structure, per aggiugerer/rimuovere/modificare oggetti, utile in caso di aggiunte successive e non ricreare la struttura
+ * usare campo ref per riferimento ad altri oggetti
+ *
+ * aggiungere metodi per gestione constraint alla Column
+ *
+ */
+
+/**
+ * @param array $keys
+ * @param array $arr
+ * @return bool
+ */
+
+class test {
+
+    public function __construct($a) {
+
+    }
+
+}
+
+try {
+    array_keys_exists('a','a');
+
+}
+catch (TypeError $e) {
+    echo $e->getMessage();
+}
+die();
+try {
+    $l = new ReflectionClass('pppp');
+
+}
+catch (ReflectionException $e) {
+    if ($e->getCode() == -1) {
+        throw new Exception($e->getMessage(), $e->getCode(), $e);
+    }
+}
+
+$p = new ReflectionClass('test');
+$l = $p->getConstructor();
+print_r($l->getParameters());
+
+die();
 function array_keys_exists(array $keys, array $arr) {
    return !array_diff_key(array_flip($keys), $arr);
 }

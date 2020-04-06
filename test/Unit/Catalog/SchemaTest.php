@@ -102,4 +102,11 @@ class SchemaTest extends TestCase
         $get = $this->object->getTable('table');
         $this->assertSame($table, $get, sprintf('La tabella aggiunta non risulta essere la stessa'));
     }
+
+    public function testFactoryMethodTypeAsParameter()
+    {
+        $c = Schema::createCatalogObjectInstance('name', ['type' => 'sss']);
+        $this->assertEquals(Schema::TYPENAME, $c->getType());
+    }
+
 }

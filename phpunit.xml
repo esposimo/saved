@@ -14,10 +14,13 @@ and open the template in the editor.
          stopOnFailure="true">
 </phpunit-->
 
-<phpunit colors="false" verbose="true" bootstrap="/app/projects/saved/test/bootstrap.php">
+<phpunit colors="false" verbose="true" bootstrap="/home/smn/PhpstormProjects/saved/test/bootstrap.php">
     <testsuites>
         <testsuite name="Unit Test">
             <directory>Unit</directory>
+        </testsuite>
+    <testsuite name="Functionally test">
+            <directory>Functionally</directory>
         </testsuite>
     </testsuites>
     <extensions>

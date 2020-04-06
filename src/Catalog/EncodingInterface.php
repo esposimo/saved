@@ -26,5 +26,8 @@ interface EncodingInterface {
      * @param String $value
      */
     public function convert(EncodingInterface $encoding, String $value);
+
+
+    public static function createEncodingInstanceFromName(string $name = '');
     
 }

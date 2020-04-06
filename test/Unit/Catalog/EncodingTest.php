@@ -3,6 +3,7 @@
 namespace smn\lazyc\dbc\Catalog;
 
 use PHPUnit\Framework\TestCase;
+use smn\lazyc\dbc\Catalog\Encoding\UTF8;
 
 class EncodingTest extends TestCase
 {
@@ -31,5 +32,25 @@ class EncodingTest extends TestCase
         $converted = $this->encoding->convert(new Encoding('latin1'),$char); // qui sto assegnando il valore 0x00c0 unicode ad un encoding in utf8 e convertendo in latin1. Risultato atteso 192
         $this->assertEquals(1,strlen($converted));
         $this->assertEquals(0xc0,ord(substr($converted,0,1)));
+    }
+
+
+    public function testFactoryMethodNoName() {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No encode specified');
+        $encode = Encoding::createEncodingInstanceFromName();
+    }
+
+    public function testFactoryMethodName() {
+        $encode = Encoding::createEncodingInstanceFromName('utf8');
+        $this->assertEquals($encode->getCharSet(), 'utf8');
+        $this->assertInstanceOf(Encoding::class, $encode);
+
+    }
+
+    public function testFactoryMethodExtendedClass() {
+        $encode = UTF8::createEncodingInstanceFromName();
+        $this->assertEquals($encode->getCharSet(),'utf-8');
+        $this->assertInstanceOf(UTF8::class, $encode);
     }
 }

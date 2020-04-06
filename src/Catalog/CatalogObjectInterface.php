@@ -125,7 +125,7 @@ interface CatalogObjectInterface {
      * @param array $options Opzioni estese per oggetti custom
      * @return static::class
      */
-    public static function createCatalogObjectInstance(string $name, $options = []);
+    public static function createCatalogObjectInstance(string $name, array $options = []);
     
 }
 

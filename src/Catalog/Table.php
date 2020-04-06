@@ -140,7 +140,22 @@ class Table extends CatalogObject implements PrintableInterface, TableInterface 
         $this->removeChild($column, Column::TYPENAME);
     }
     
-    public static function createCatalogObjectInstance(string $name, $options = array()) {
+    public static function createCatalogObjectInstance(string $name, $options = []) {
+        $params = ['object_child','encoding','constraints'];
+/*        $combine = [];
+        if ((count($params) != count($options)) && (count($options) > 0)) {
+            if (count($params) > count($options)) {
+                $p = array_slice($params, 0, count($options), true);
+                $combine = array_combine(array_values($p), array_values($options));
+            } else {
+                $p = array_slice($options, 0, count($params), true);
+                $combine = array_combine(array_values($params), array_values($p));
+            }
+        } else {
+            $combine = array_combine(array_values($params), array_values($options));
+        }
+        $options = $combine;
+*/
         $table = parent::createCatalogObjectInstance($name, $options);
         if (array_key_exists('constraints', $options)) {
             $constraints = $options['constraints'];
